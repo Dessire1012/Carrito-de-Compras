@@ -19,6 +19,23 @@ export default function Carrito() {
     history.push("/");
   };
 
+  const subtotal = cart.reduce((total, item) => {
+    const { productId, quantity } = item;
+    const product = products.find((p) => p.id === productId);
+    if (product) {
+      return total + product.price * quantity;
+    }
+    return total;
+  }, 0);
+
+  let descuento = 0;
+  let total = 0;
+
+  if (subtotal) {
+    descuento = 10;
+    total = subtotal - descuento;
+  }
+
   return (
     <>
       <h1>Carrito</h1>
@@ -35,7 +52,8 @@ export default function Carrito() {
             <th>Cantidad</th>
             <th>Producto</th>
             <th>Precio Unitario</th>
-            <th>Total</th>
+            <th>Importe</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -67,6 +85,29 @@ export default function Carrito() {
             );
           })}
         </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan="2"></td>
+            <td>
+              <strong>Subtotal:</strong>
+            </td>
+            <td>$ {subtotal}</td>
+          </tr>
+          <tr>
+            <td colSpan="2"></td>
+            <td>
+              <strong>Descuento:</strong>
+            </td>
+            <td>$ {descuento.toFixed(2)}</td>
+          </tr>
+          <tr>
+            <td colSpan="2"></td>
+            <td>
+              <strong>Total:</strong>
+            </td>
+            <td>$ {total.toFixed(2)}</td>
+          </tr>
+        </tfoot>
       </Table>
     </>
   );
